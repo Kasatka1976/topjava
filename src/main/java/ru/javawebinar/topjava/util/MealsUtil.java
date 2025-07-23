@@ -47,7 +47,7 @@ public class MealsUtil {
         }
 
         List<MealTo> list = new ArrayList<>();
-        for (Meal meal : meals) {
+        for (Meal meal :  meals) {
             if (TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)) {
                 MealTo mealTo = createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay);
                 list.add(mealTo);
