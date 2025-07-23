@@ -7,9 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MealsUtil {
@@ -39,6 +37,23 @@ public class MealsUtil {
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime))
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
+    }
+
+    public static List<MealTo> filteredByCycles(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        // TODO return filtered list with excess. Implement by cycles
+        Map<LocalDate, Integer> caloriesSumByDate = new HashMap<>();
+        for (Meal meal : meals) {
+            caloriesSumByDate.merge(meal.getDate(), meal.getCalories(), Integer::sum);
+        }
+
+        List<MealTo> list = new ArrayList<>();
+        for (Meal meal : meals) {
+            if (TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)) {
+                MealTo mealTo = createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay);
+                list.add(mealTo);
+            }
+        }
+        return list;
     }
 
     private static MealTo createTo(Meal meal, boolean excess) {
